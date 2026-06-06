@@ -7,19 +7,23 @@ import binaryTree.Node;
 
 public class Main {
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\n=================================================");
-            System.out.println("                  TRABALHO 3          ");
+            System.out.println("                  TRABALHO 3                  ");
             System.out.println("=================================================");
             System.out.println("1. Modo 1: Torneio Eliminatório (Árvore Binária)");
             System.out.println("2. Modo 2: Menu de Aplicativo (Árvore Genérica)");
             System.out.println("3. Sair do Programa");
             System.out.print("Escolha o modo que deseja testar: ");
 
+            if (!scanner.hasNextInt()) {
+                System.out.println("Por favor, digite um número válido.");
+                scanner.nextLine();
+                continue;
+            }
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Limpa o buffer do ENTER
 
             switch (choice) {
                 case 1:
@@ -45,7 +49,7 @@ public class Main {
         System.out.println("   MODO 1: TORNEIO ELIMINATÓRIO          ");
         System.out.println("=========================================");
 
-        // jogadores padroes
+        // Jogadores padrões
         List<String> defaultPlayers = Arrays.asList("Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Hank");
         tournament.createTournament(defaultPlayers);
         System.out.println("Torneio inicializado com 8 participantes padrão:");
@@ -63,25 +67,32 @@ public class Main {
             System.out.println("7. Voltar ao Menu Principal");
             System.out.print("Escolha uma opção: ");
 
+            if (!scanner.hasNextInt()) {
+                System.out.println("Por favor, digite um número válido.");
+                scanner.nextLine();
+                continue;
+            }
             int option = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Limpa o buffer do ENTER
 
             switch (option) {
                 case 1:
                     System.out.print("Quantos participantes terá o torneio? ");
                     int qtd = scanner.nextInt();
-                    scanner.nextLine();
+                    scanner.nextLine(); // Limpa buffer
                     List<String> players = new ArrayList<>();
                     for (int i = 1; i <= qtd; i++) {
                         System.out.print("Nome do participante " + i + ": ");
-                        players.add(scanner.nextLine());
+                        players.add(scanner.next()); // Usa next() para evitar quebra de linhas problemáticas
                     }
+                    scanner.nextLine(); // Limpa o resto da linha se houver
                     tournament.createTournament(players);
                     System.out.println("Novo torneio criado!");
                     break;
                 case 2:
                     System.out.print("Nome do jogador que venceu a partida: ");
-                    String winner = scanner.nextLine();
+                    String winner = scanner.next(); // Captura a palavra digitada com segurança
+                    scanner.nextLine(); // Limpa buffer
                     if (tournament.registerWinner(winner)) {
                         System.out.println("Sucesso! " + winner + " avançou.");
                     } else {
@@ -105,9 +116,10 @@ public class Main {
                     break;
                 case 5:
                     System.out.print("Jogador 1: ");
-                    String j1 = scanner.nextLine();
+                    String j1 = scanner.next();
                     System.out.print("Jogador 2: ");
-                    String j2 = scanner.nextLine();
+                    String j2 = scanner.next();
+                    scanner.nextLine(); // Limpa buffer
                     Node lca = tournament.findLCA(j1, j2);
                     if (lca != null) {
                         System.out.println("LCA: [" + (lca.data.isEmpty() ? "Não definido" : lca.data) + "]");
@@ -117,14 +129,15 @@ public class Main {
                     break;
                 case 6:
                     System.out.print("Origem (From): ");
-                    String from = scanner.nextLine();
+                    String from = scanner.next();
                     System.out.print("Destino (To): ");
-                    String to = scanner.nextLine();
+                    String to = scanner.next();
+                    scanner.nextLine(); // Limpa buffer
                     tournament.printPath(from, to);
                     break;
                 case 7:
                     System.out.println("Saindo do modo Torneio...");
-                    return; // sai do método e volta para o menu principal do main
+                    return; 
                 default:
                     System.out.println("Opção inválida!");
             }
@@ -136,6 +149,7 @@ public class Main {
         System.out.println("     MODO 2: MENU DE APLICATIVO      ");
         System.out.println("=========================================");
         
-        // TODO: Menu de aplicação (Árvore genérica)
+        System.out.println("Pressione ENTER para voltar...");
+        scanner.nextLine();
     }
 }
