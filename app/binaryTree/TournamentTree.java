@@ -39,6 +39,7 @@ public class TournamentTree {
         this.root = queue.poll();
     }
 
+    // encontra node pelo nome do participante
     public Node findNode(Node node, String data) {
         if (node == null) return null;
         if (node.data.equalsIgnoreCase(data)) return node;
@@ -47,5 +48,16 @@ public class TournamentTree {
         if (found != null) return found;
 
         return findNode(node.right, data);
+    }
+
+    // define vencedor de uma partida
+    public boolean registerWinner(String winnerName) {
+        Node node = findNode(root, winnerName);
+
+        // participante ja é o campeão ou nn encontrou
+        if (node == null || node.parent == null) return false; 
+
+        node.parent.data = winnerName;
+        return true;
     }
 }
