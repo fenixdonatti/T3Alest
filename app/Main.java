@@ -25,6 +25,9 @@ public class Main {
                 case 1:
                     runTournamentMode(scanner);
                     break;
+                case 2:
+                    runMenuMode(scanner);
+                    break;
                 case 3:
                     System.out.println("Saindo do programa...");
                     scanner.close();
