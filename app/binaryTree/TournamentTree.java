@@ -1,8 +1,10 @@
 package binaryTree;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 public class TournamentTree {
     Node root;
@@ -112,5 +114,28 @@ public class TournamentTree {
         if (node.left == null && node.right == null) return 0;
 
         return 1 + countInternalNodes(node.left) + countInternalNodes(node.right);
+    }
+
+    // LCA
+    public Node findLCA(String x, String y) {
+        Node n1 = findNode(root, x);
+        Node n2 = findNode(root, y);
+        if (n1 == null || n2 == null) return null;
+
+        Set<Node> ancestors = new HashSet<>();
+
+        Node current = n1;
+        while (current != null) {
+            ancestors.add(current);
+            current = current.parent;
+        }
+
+        current = n2;
+        while (current != null) {
+            if (ancestors.contains(current)) return current;
+            current = current.parent;
+        }
+
+        return null;
     }
 }
