@@ -1,5 +1,6 @@
 package binaryTree;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,5 +138,49 @@ public class TournamentTree {
         }
 
         return null;
+    }
+
+public void printPath(String from, String to) {
+        Node start = findNode(root, from);
+        Node end = findNode(root, to);
+        if (start == null || end == null) {
+            System.out.println("Participante(s) não encontrado(s).");
+            return;
+        }
+
+        Node lca = findLCA(from, to);
+        if (lca == null) return;
+
+        // caminho subindo do node start até o LCA
+        List<String> upPath = new ArrayList<>();
+        Node current = start;
+        while(current != lca) {
+            String nomeItem = current.data.isEmpty() ? "Não definido" : current.data;
+            upPath.add(nomeItem);
+            current = current.parent;
+        }
+
+        // caminho descendo do LCA até o node end
+        List<String> downPath = new ArrayList<>();
+        current = end;
+        while (current != lca) {
+            String nomeItem = current.data.isEmpty() ? "Não definido" : current.data;
+            downPath.add(0, nomeItem); // insere no início para inverter a ordem na descida
+            current = current.parent;
+        }
+
+        // impressão do resultado formatado no console
+        System.out.print("Caminho: ");
+        for (String step : upPath) {
+            System.out.print(step + " -> ");
+        }
+        
+        String lcaNome = lca.data.isEmpty() ? "Não definido" : lca.data;
+        System.out.print("[" + lcaNome + "]");
+        
+        for (String step : downPath) {
+            System.out.print(" -> " + step);
+        }
+        System.out.println();
     }
 }
