@@ -99,4 +99,11 @@ public class TournamentTree {
         if (node == null) return -1;
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
     }
+
+    public int countLeaves(Node node) {
+        if (node == null) return 0;
+        if (node.left == null && node.right == null) return 1;
+
+        return countLeaves(node.left) + countLeaves(node.right);
+    }
 }
