@@ -7,9 +7,10 @@ import java.util.Queue;
 public class TournamentTree {
     Node root;
 
-    
+
     // cria o torneio com a lista dos participantes
     public void createTournament(List<String> participants) {
+        // verificações
         if (participants == null || participants.isEmpty()) return;
 
         Queue<Node> queue = new LinkedList<>();
@@ -36,5 +37,15 @@ public class TournamentTree {
         }
 
         this.root = queue.poll();
+    }
+
+    public Node findNode(Node node, String data) {
+        if (node == null) return null;
+        if (node.data.equalsIgnoreCase(data)) return node;
+
+        Node found = findNode(node.left, data);
+        if (found != null) return found;
+
+        return findNode(node.right, data);
     }
 }
