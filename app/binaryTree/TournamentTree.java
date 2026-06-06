@@ -106,4 +106,11 @@ public class TournamentTree {
 
         return countLeaves(node.left) + countLeaves(node.right);
     }
+
+    public int countInternalNodes(Node node) {
+        if (node == null) return 0;
+        if (node.left == null && node.right == null) return 0;
+
+        return 1 + countInternalNodes(node.left) + countInternalNodes(node.right);
+    }
 }
