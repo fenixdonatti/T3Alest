@@ -128,5 +128,11 @@ public class Main {
         }
     }
 
-    
+    private static void runMenuMode(Scanner scanner) {
+        System.out.println("\n=========================================");
+        System.out.println("     MODO 2: MENU DE APLICATIVO      ");
+        System.out.println("=========================================");
+        
+        // TODO: Menu de aplicação (Árvore genérica)
+    }
 }
