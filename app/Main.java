@@ -18,6 +18,7 @@ public class Main {
             System.out.print("Escolha o modo que deseja testar: ");
 
             if (!scanner.hasNextInt()) {
+                limparTela();
                 System.out.println("Por favor, digite um número válido.");
                 scanner.nextLine();
                 continue;
@@ -27,9 +28,11 @@ public class Main {
 
             switch (choice) {
                 case 1:
+                    limparTela();
                     runTournamentMode(scanner);
                     break;
                 case 2:
+                    limparTela();
                     runMenuMode(scanner);
                     break;
                 case 3:
@@ -37,6 +40,7 @@ public class Main {
                     scanner.close();
                     return;
                 default:
+                    limparTela();
                     System.out.println("Opção inválida!");
             }
         }
@@ -68,6 +72,7 @@ public class Main {
             System.out.print("Escolha uma opção: ");
 
             if (!scanner.hasNextInt()) {
+                limparTela();
                 System.out.println("Por favor, digite um número válido.");
                 scanner.nextLine();
                 continue;
@@ -77,22 +82,26 @@ public class Main {
 
             switch (option) {
                 case 1:
+                    limparTela();
                     System.out.print("Quantos participantes terá o torneio? ");
                     int qtd = scanner.nextInt();
                     scanner.nextLine(); // Limpa buffer
                     List<String> players = new ArrayList<>();
                     for (int i = 1; i <= qtd; i++) {
                         System.out.print("Nome do participante " + i + ": ");
-                        players.add(scanner.next()); // Usa next() para evitar quebra de linhas problemáticas
+                        players.add(scanner.next());
                     }
-                    scanner.nextLine(); // Limpa o resto da linha se houver
+                    scanner.nextLine(); // Limpa o resto da linha
+                    limparTela();
                     tournament.createTournament(players);
                     System.out.println("Novo torneio criado!");
                     break;
                 case 2:
+                    limparTela();
                     System.out.print("Nome do jogador que venceu a partida: ");
-                    String winner = scanner.next(); // Captura a palavra digitada com segurança
+                    String winner = scanner.next();
                     scanner.nextLine(); // Limpa buffer
+                    limparTela();
                     if (tournament.registerWinner(winner)) {
                         System.out.println("Sucesso! " + winner + " avançou.");
                     } else {
@@ -100,6 +109,7 @@ public class Main {
                     }
                     break;
                 case 3:
+                    limparTela();
                     System.out.println("\n--- PERCURSOS ---");
                     System.out.println("Pré-Ordem:");
                     tournament.preOrder(tournament.root);
@@ -109,17 +119,20 @@ public class Main {
                     tournament.lengthSearch();
                     break;
                 case 4:
+                    limparTela();
                     System.out.println("\n--- ESTATÍSTICAS ---");
                     System.out.println("Altura: " + tournament.getHeight(tournament.root));
                     System.out.println("Folhas (Participantes): " + tournament.countLeaves(tournament.root));
                     System.out.println("Nós Internos (Partidas): " + tournament.countInternalNodes(tournament.root));
                     break;
                 case 5:
+                    limparTela();
                     System.out.print("Jogador 1: ");
                     String j1 = scanner.next();
                     System.out.print("Jogador 2: ");
                     String j2 = scanner.next();
                     scanner.nextLine(); // Limpa buffer
+                    limparTela();
                     Node lca = tournament.findLCA(j1, j2);
                     if (lca != null) {
                         System.out.println("LCA: [" + (lca.data.isEmpty() ? "Não definido" : lca.data) + "]");
@@ -128,17 +141,21 @@ public class Main {
                     }
                     break;
                 case 6:
+                    limparTela();
                     System.out.print("Origem (From): ");
                     String from = scanner.next();
                     System.out.print("Destino (To): ");
                     String to = scanner.next();
                     scanner.nextLine(); // Limpa buffer
+                    limparTela();
                     tournament.printPath(from, to);
                     break;
                 case 7:
+                    limparTela();
                     System.out.println("Saindo do modo Torneio...");
                     return; 
                 default:
+                    limparTela();
                     System.out.println("Opção inválida!");
             }
         }
@@ -148,8 +165,26 @@ public class Main {
         System.out.println("\n=========================================");
         System.out.println("     MODO 2: MENU DE APLICATIVO      ");
         System.out.println("=========================================");
-        
+        System.out.println("Espaço reservado para a árvore genérica do seu colega.");
         System.out.println("Pressione ENTER para voltar...");
         scanner.nextLine();
+        limparTela();
+    }
+
+    private static void limparTela() {
+        try {
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows")) {
+                // Executa o comando 'cls' do Windows em um processo do terminal externo
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // Executa o comando 'clear' no Linux/Mac
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (final Exception e) {
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
+        }
     }
 }
