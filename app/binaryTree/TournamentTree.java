@@ -60,4 +60,38 @@ public class TournamentTree {
         node.parent.data = winnerName;
         return true;
     }
+
+    // pre ordem
+    public void preOrder(Node node) {
+        if (node == null) return;
+
+        System.out.println("[" + (node.data.isEmpty() ? "Não definido" : node.data) + "] ");
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    // pos ordem
+    public void postOrder(Node node) {
+        if (node == null) return;
+
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.println("[" + (node.data.isEmpty() ? "Não definido" : node.data) + "] ");
+    }
+
+    // largura
+    public void lengthSearch() {
+        if (root == null) return;
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            System.out.println("[" + (current.data.isEmpty() ? "Não definido" : current.data) + "] ");
+
+            if (current.left != null) queue.add(current.left);
+            if (current.right != null) queue.add(current.right);
+        }
+    }
 }
