@@ -94,4 +94,9 @@ public class TournamentTree {
             if (current.right != null) queue.add(current.right);
         }
     }
+
+    public int getHeight(Node node) {
+        if (node == null) return -1;
+        return 1 + Math.max(getHeight(node.left), getHeight(node.right));
+    }
 }
