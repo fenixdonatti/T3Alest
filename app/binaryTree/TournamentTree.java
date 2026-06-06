@@ -8,7 +8,7 @@ import java.util.Queue;
 import java.util.Set;
 
 public class TournamentTree {
-    Node root;
+    public Node root;
 
     // cria o torneio com a lista dos participantes
     public void createTournament(List<String> participants) {

@@ -1,10 +1,10 @@
 package binaryTree;
 
 public class Node {
-    String data;
-    Node left;
-    Node right;
-    Node parent;
+    public String data;
+    public Node left;
+    public Node right;
+    public Node parent;
 
     public Node(String data) {
         this.data = data;
