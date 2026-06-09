@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.Set;
 
 public class TournamentTree {
+    // raiz da arvore
     public Node root;
 
     // cria o torneio com a lista dos participantes
@@ -51,13 +52,21 @@ public class TournamentTree {
 
         // quando sobrar um elemento na fila ele vai ser o do topo
         // da arvore, a final do campeonato
+        //              root
+        //          /         \
+        //     parent         parent
+        //    /      \        /     \
+        //[nome]  [nome]   [nome]  [nome]
         this.root = queue.poll();
     }
 
     // encontra node pelo nome do participante
+    // coloca a raiz como primeiro argumento
     public Node findNode(Node node, String data) {
+        // chegou ao fim
         if (node == null)
             return null;
+        // achou
         if (node.data.equalsIgnoreCase(data))
             return node;
 
@@ -68,6 +77,12 @@ public class TournamentTree {
 
         // se nn achou na esquerda faz a mesma recursão so que na direita
         return findNode(node.right, data);
+
+        // Raiz
+        //  v
+        // Esquerda inteira
+        //  v
+        // Direita inteira
     }
 
     // define vencedor de uma partida
@@ -84,6 +99,7 @@ public class TournamentTree {
     }
 
     // pre ordem
+    // raiz -> esquerda -> direita
     public void preOrder(Node node) {
         if (node == null)
             return;
@@ -96,6 +112,7 @@ public class TournamentTree {
     }
 
     // pos ordem
+    // esquerda -> direita -> raiz
     public void postOrder(Node node) {
         if (node == null)
             return;
@@ -142,6 +159,7 @@ public class TournamentTree {
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
     }
 
+    // contar nodos sem filhos
     public int countLeaves(Node node) {
         if (node == null)
             return 0;
@@ -155,6 +173,7 @@ public class TournamentTree {
     }
 
     // conta nodos internos (partidas)
+    // (pelo menos um filho)
     public int countInternalNodes(Node node) {
         if (node == null)
             return 0;
@@ -176,6 +195,9 @@ public class TournamentTree {
             return null;
 
         // cria um conjunto e faz o caminho até o topo e vai armazenando os nodos no caminho
+
+        // começa pelo jogador 1 e vai subindo pelo parent dele até chegar na raiz.
+        // enquanto sobe, vai armazenando o node que passou no Set.
         Set<Node> ancestors = new HashSet<>();
         Node current = n1;
         while (current != null) {
@@ -184,6 +206,8 @@ public class TournamentTree {
         }
 
         // faz a mesma coisa mas agora com o segundo participante
+        // A cada subida, verifica se passou pelo mesmo nodo que o n1 passou
+        // se ambos passaram por ali retorna o nodo atual
         current = n2;
         while (current != null) {
             if (ancestors.contains(current))
@@ -198,24 +222,22 @@ public class TournamentTree {
     }
 
     public void printPath(String from, String to) {
-        // busca os nodes start e end e o ancestral comum
+        // encontra os nodes e o LCA (proxima partida)
         Node start = findNode(root, from);
         Node end = findNode(root, to);
         if (start == null || end == null) {
             System.out.println("Participante(s) não encontrado(s).");
             return;
         }
-
         Node lca = findLCA(from, to);
         if (lca == null)
             return;
 
-
-
-
         // monta uma lista do caminho subida, vai do nodo inicial e sobe de pai em pai até encontrar
         // o ancestral em comum lca.
         // mais complicado tive que usar ajuda exterior :(((
+
+        // sobe do node start, de pai em pai adicionando os nomes na lista
         List<String> upPath = new ArrayList<>();
         Node current = start;
         while (current != lca) {
@@ -225,11 +247,13 @@ public class TournamentTree {
         }
 
         // monta o caminho descida, sobe do node final até o lca
+        // segunda subida, simula descida.
+        // começa no node end e vai subindo em direção ao lca.
         List<String> downPath = new ArrayList<>();
         current = end;
         while (current != lca) {
             String nomeItem = current.data.isEmpty() ? "Não definido" : current.data;
-            downPath.add(0, nomeItem); // insere no início para inverter a ordem na descida
+            downPath.add(0, nomeItem); // se forçar a colocar na posição 0, os nodes vao sendo colocados para o fim.
             current = current.parent;
         }
 

@@ -54,7 +54,7 @@ public class Main {
         System.out.println("=========================================");
 
         // Jogadores padrões
-        List<String> defaultPlayers = Arrays.asList("Fulano", "Fulana", "Beltrano", "Beltrana", "Caitana", "Caitano", "Juliano", "Juliana");
+        List<String> defaultPlayers = Arrays.asList("Fulano", "Fulana", "Beltrano", "Beltrana");
         tournament.createTournament(defaultPlayers);
         System.out.println("Torneio inicializado com 8 participantes padrão:");
         System.out.println(defaultPlayers);
@@ -171,6 +171,8 @@ public class Main {
         limparTela();
     }
 
+
+    // misc
     private static void limparTela() {
         try {
             final String os = System.getProperty("os.name");
