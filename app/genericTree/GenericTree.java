@@ -3,10 +3,10 @@ package genericTree;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-public class Node {
+public class GenericTree {
 
     private String nome;
-    private ArrayList<Node> subArvores;
+    private ArrayList<GenericTree> subArvores;
 
 
 
@@ -18,9 +18,9 @@ public class Node {
 
     public void moveSubArvore(String mover, String ondeColocar) {
 
-        Node parent = findParent(this, mover);
-        Node mover1 = findNode(this, mover);
-        Node destino = findNode(this, ondeColocar);
+        GenericTree parent = findParent(this, mover);
+        GenericTree mover1 = findNode(this, mover);
+        GenericTree destino = findNode(this, ondeColocar);
 
 
         parent.subArvores.remove(mover1);
@@ -30,38 +30,38 @@ public class Node {
     }
 
     public void addNode(String novo, String onde) {
-        Node pai = findNode(this, onde);
+        GenericTree pai = findNode(this, onde);
         if (pai != null) {
-            pai.subArvores.add(new Node(novo));
+            pai.subArvores.add(new GenericTree(novo));
         }
     }
 
     public void removeNode(String removerEssa) {
-        Node remover = findNode(this, removerEssa);
-        Node parent = findParent(this, removerEssa);
+        GenericTree remover = findNode(this, removerEssa);
+        GenericTree parent = findParent(this, removerEssa);
 
          parent.subArvores.remove(remover);
         remover.subArvores.clear();//desnecessario
 
     }
     /// find nodes
-    private Node findParent(Node atual, String target) {
-        for (Node filho : atual.getSubArvores()) {
+    private GenericTree findParent(GenericTree atual, String target) {
+        for (GenericTree filho : atual.getSubArvores()) {
             if (filho.getNome().equals(target)) return atual;
-            Node resultado = findParent(filho, target);
+            GenericTree resultado = findParent(filho, target);
             if (resultado != null) return resultado;
         }
         return null;
     }
 
-    public Node findNode (Node atual, String target){
+    public GenericTree findNode (GenericTree atual, String target){
 
         if (atual.getNome().equals(target)){
             return atual;
         }
-        for (Node filho : atual.getSubArvores()){
+        for (GenericTree filho : atual.getSubArvores()){
 
-            Node result = findNode(filho, target);
+            GenericTree result = findNode(filho, target);
             if (result  != null) return result;
         }
 
@@ -70,13 +70,13 @@ public class Node {
     }
 
     ////consultas
-    public int determineAltrua(Node atual) {
+    public int determineAltrua(GenericTree atual) {
         int maiorAltura = 0;
 
         if (atual.getSubArvores().isEmpty()) {
             return 0;
         }
-        for (Node filho : atual.getSubArvores()){
+        for (GenericTree filho : atual.getSubArvores()){
             if (filho != null) {
 
                 int alturaFilho = determineAltrua(filho);
@@ -92,13 +92,13 @@ public class Node {
     }
 
 
-    public int contarFilhos(Node pai){
+    public int contarFilhos(GenericTree pai){
 
         int cont = 0;
 
         if (pai.getSubArvores() != null)
         {
-            for (Node filho : pai.getSubArvores()){
+            for (GenericTree filho : pai.getSubArvores()){
 
                 cont++;
 
@@ -109,25 +109,25 @@ public class Node {
     }
 
 
-    public void largura(Node raiz) {
+    public void largura(GenericTree raiz) {
         if (raiz == null) return;
 
-        LinkedList<Node> fila = new LinkedList<>();
+        LinkedList<GenericTree> fila = new LinkedList<>();
         fila.add(raiz);
 
         while (!fila.isEmpty()) {
-            Node atual = fila.poll();
+            GenericTree atual = fila.poll();
             System.out.println(atual.getNome());
 
-            for (Node filho : atual.getSubArvores()) {
+            for (GenericTree filho : atual.getSubArvores()) {
                 fila.add(filho);
             }
         }
     }
-    public int maiorGrau(Node atual) {
+    public int maiorGrau(GenericTree atual) {
         int maiorGrau =  contarFilhos(atual);
 
-        for (Node filho : atual.getSubArvores()){
+        for (GenericTree filho : atual.getSubArvores()){
             if (filho != null) {
 
 
@@ -145,14 +145,14 @@ public class Node {
         return maiorGrau;
     }
 
-    public int contarExternos(Node atual) {
+    public int contarExternos(GenericTree atual) {
 
         int cont = 0;
 
         if (atual.getSubArvores().isEmpty()) {
             return 1;
         }
-        for (Node filho : atual.getSubArvores()){
+        for (GenericTree filho : atual.getSubArvores()){
             if (filho != null) {
 
                   cont = cont + contarExternos(filho);
@@ -164,7 +164,7 @@ public class Node {
         return  cont;
     }
 
-    public int contarInternos(Node atual) {
+    public int contarInternos(GenericTree atual) {
 
         int cont = 0;
 
@@ -172,7 +172,7 @@ public class Node {
             return 0;
         }
         cont = 1;
-        for (Node filho : atual.getSubArvores()){
+        for (GenericTree filho : atual.getSubArvores()){
             if (filho != null) {
 
                 cont = cont + contarInternos(filho);
@@ -184,15 +184,15 @@ public class Node {
         return  cont;
     }
 
-    public Node maisBaixo(Node atual) {
+    public GenericTree maisBaixo(GenericTree atual) {
         if (atual.getSubArvores().isEmpty()) {
             return atual;
         }
 
-        Node maior = null;
+        GenericTree maior = null;
         int maiorAltura = 0;
 
-        for (Node filho : atual.getSubArvores()){
+        for (GenericTree filho : atual.getSubArvores()){
             if (filho != null) {
                 int oi = determineAltrua(filho);
                 if (oi > maiorAltura) {
@@ -206,7 +206,7 @@ public class Node {
         return maisBaixo(maior);
     }
 
-    public boolean caminho (Node x, Node y){
+    public boolean caminho (GenericTree x, GenericTree y){
 
         if (x== y){
             System.out.println(y.getNome());
@@ -214,7 +214,7 @@ public class Node {
         }
         System.out.println(x.getNome());
 
-        for (Node i : x.getSubArvores()){
+        for (GenericTree i : x.getSubArvores()){
 
             if (i== y){
                 System.out.println(y.getNome());
@@ -229,8 +229,8 @@ public class Node {
 
     public void caminhoStrings (String nome1, String nome2){
 
-        Node n1 = findNode(this, nome1);
-        Node n2 = findNode(this, nome2);
+        GenericTree n1 = findNode(this, nome1);
+        GenericTree n2 = findNode(this, nome2);
 
         caminho(n1, n2);
 
@@ -239,20 +239,20 @@ public class Node {
     /// PreOrdem PosOrdem e Larguraaaaaaaaaaaaaaaaaa
 
 
-    public void preOrdem(Node x) {
+    public void preOrdem(GenericTree x) {
         if (x == null) return;
 
         System.out.println(x.getNome());
 
-        for (Node filho : x.getSubArvores()) {
+        for (GenericTree filho : x.getSubArvores()) {
             preOrdem(filho);
         }
     }
 
-    public void posOrdem(Node x) {
+    public void posOrdem(GenericTree x) {
         if (x == null) return;
 
-        for (Node filho : x.getSubArvores()) {
+        for (GenericTree filho : x.getSubArvores()) {
             posOrdem(filho);
         }
 
@@ -266,15 +266,15 @@ public class Node {
         this.nome = nome;
     }
 
-    public ArrayList<Node> getSubArvores() {
+    public ArrayList<GenericTree> getSubArvores() {
         return subArvores;
     }
 
-    public void setSubArvores(ArrayList<Node> subArvores) {
+    public void setSubArvores(ArrayList<GenericTree> subArvores) {
         this.subArvores = subArvores;
     }
 
-    public Node (String nome){
+    public GenericTree (String nome){
 
         this.nome = nome;
 

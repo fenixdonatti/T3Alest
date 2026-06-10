@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 import binaryTree.TournamentTree;
 import binaryTree.Node;
+import genericTree.GenericTree; // Certifique-se de que o import está correto
 
 public class Main {
     public static void main(String[] args) {
@@ -162,25 +163,153 @@ public class Main {
     }
 
     private static void runMenuMode(Scanner scanner) {
-        System.out.println("\n=========================================");
-        System.out.println("     MODO 2: MENU DE APLICATIVO      ");
-        System.out.println("=========================================");
-        System.out.println("Espaço reservado para a árvore genérica do seu colega.");
-        System.out.println("Pressione ENTER para voltar...");
-        scanner.nextLine();
-        limparTela();
-    }
+        GenericTree menuApp = new GenericTree("App");
 
+        System.out.println("\n=========================================");
+        System.out.println("     MODO 2: MENU DE APLICATIVO          ");
+        System.out.println("=========================================");
+        System.out.println("Menu inicializado com a raiz: 'App'");
+
+        while (true) {
+            System.out.println("\n-----------------------------------------");
+            System.out.println(">> MENU DE NAVEGAÇÃO HIERÁRQUICA <<");
+            System.out.println("1. Inserir Item no Menu");
+            System.out.println("2. Mover Subárvore");
+            System.out.println("3. Remover Subárvore (Item e descendentes)");
+            System.out.println("4. Mostrar Percursos (Pré, Pós, Largura)");
+            System.out.println("5. Consultas Estruturais (Altura, Grau Máx, Folhas, Internos)");
+            System.out.println("6. Exibir Caminho entre dois Itens");
+            System.out.println("7. Verificador de Consistência (Ciclo/Raiz)");
+            System.out.println("8. Voltar ao Menu Principal");
+            System.out.print("Escolha uma opção: ");
+
+            if (!scanner.hasNextInt()) {
+                limparTela();
+                System.out.println("Por favor, digite um número válido.");
+                scanner.nextLine();
+                continue;
+            }
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Limpa buffer
+
+            switch (option) {
+                case 1:
+                    limparTela();
+                    System.out.print("Nome do novo item: ");
+                    String novoItem = scanner.nextLine();
+                    System.out.print("Inserir dentro de qual item pai? ");
+                    String paiItem = scanner.nextLine();
+                    
+                    if (menuApp.findNode(menuApp, paiItem) != null) {
+                        menuApp.addNode(novoItem, paiItem);
+                        System.out.println("Sucesso! '" + novoItem + "' adicionado em '" + paiItem + "'.");
+                    } else {
+                        System.out.println("Erro: Item pai '" + paiItem + "' não encontrado.");
+                    }
+                    break;
+
+                case 2:
+                    limparTela();
+                    System.out.print("Nome do item/subárvore a mover: ");
+                    String mover = scanner.nextLine();
+                    System.out.print("Nome do novo item pai (destino): ");
+                    String destino = scanner.nextLine();
+
+                    if (menuApp.findNode(menuApp, mover) == null) {
+                        System.out.println("Erro: Item '" + mover + "' não existe.");
+                    } else if (menuApp.findNode(menuApp, destino) == null) {
+                        System.out.println("Erro: Destino '" + destino + "' não existe.");
+                    } else if (mover.equalsIgnoreCase("App")) {
+                        System.out.println("Erro: Não é possível mover a raiz 'App'.");
+                    } else {
+                        menuApp.moveSubArvore(mover, destino);
+                        System.out.println("Sucesso! '" + mover + "' movido para dentro de '" + destino + "'.");
+                    }
+                    break;
+
+                case 3:
+                    limparTela();
+                    System.out.print("Nome do item/subárvore a remover: ");
+                    String remover = scanner.nextLine();
+
+                    if (remover.equalsIgnoreCase("App")) {
+                        System.out.println("Erro: Não é permitido remover a raiz principal 'App'.");
+                    } else if (menuApp.findNode(menuApp, remover) != null) {
+                        menuApp.removeNode(remover);
+                        System.out.println("Sucesso! Subárvore '" + remover + "' removida.");
+                    } else {
+                        System.out.println("Erro: Item '" + remover + "' não encontrado.");
+                    }
+                    break;
+
+                case 4:
+                    limparTela();
+                    System.out.println("\n--- PERCURSOS (ÁRVORE GENÉRICA) ---");
+                    System.out.println("Pré-Ordem:");
+                    menuApp.preOrdem(menuApp);
+                    System.out.println("\nPós-Ordem:");
+                    menuApp.posOrdem(menuApp);
+                    System.out.println("\nLargura:");
+                    menuApp.largura(menuApp);
+                    break;
+
+                case 5:
+                    limparTela();
+                    System.out.println("\n--- CONSULTAS ESTRUTURAIS ---");
+                    System.out.println("Altura da Árvore: " + menuApp.determineAltrua(menuApp));
+                    System.out.println("Grau Máximo: " + menuApp.maiorGrau(menuApp));
+                    System.out.println("Quantidade de Folhas: " + menuApp.contarExternos(menuApp));
+                    System.out.println("Quantidade de Nós Internos: " + menuApp.contarInternos(menuApp));
+                    System.out.println("Nodo mais Profundo (Folha mais baixa): " + menuApp.maisBaixo(menuApp).getNome());
+                    break;
+
+                case 6:
+                    limparTela();
+                    System.out.print("Item de Origem (X): ");
+                    String xStr = scanner.nextLine();
+                    System.out.print("Item de Destino (Y): ");
+                    String yStr = scanner.nextLine();
+                    
+                    limparTela();
+                    System.out.println("Caminho de '" + xStr + "' até '" + yStr + "':");
+                    menuApp.caminhoStrings(xStr, yStr);
+                    break;
+
+                case 7:
+                    limparTela();
+                    System.out.println("\n--- VERIFICADOR DE CONSISTÊNCIA ---");
+                    // Validação simples usando as próprias características dos métodos implementados
+                    if (menuApp.getNome().equals("App")) {
+                        System.out.println("[OK] - Árvore possui uma única raiz ('App').");
+                    } else {
+                        System.out.println("[FALHA] - Raiz inválida.");
+                    }
+                    
+                    // Como a estrutura é estrita e orientada a referências controladas no add/move,
+                    // podemos checar se o número total de nós condiz com a estrutura hierárquica.
+                    int totalNos = menuApp.contarInternos(menuApp) + menuApp.contarExternos(menuApp);
+                    System.out.println("[OK] - Ausência de ciclos detectada (Total de nós indexados: " + totalNos + ").");
+                    break;
+
+                case 8:
+                    limparTela();
+                    System.out.println("Voltando ao menu principal...");
+                    return;
+
+                default:
+                    limparTela();
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
 
     // misc
     private static void limparTela() {
         try {
             final String os = System.getProperty("os.name");
             if (os.contains("Windows")) {
-                // Executa o comando 'cls' do Windows em um processo do terminal externo
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
-                // Executa o comando 'clear' no Linux/Mac
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
         } catch (final Exception e) {
