@@ -108,6 +108,22 @@ public class Node {
         return cont;
     }
 
+
+    public void largura(Node raiz) {
+        if (raiz == null) return;
+
+        LinkedList<Node> fila = new LinkedList<>();
+        fila.add(raiz);
+
+        while (!fila.isEmpty()) {
+            Node atual = fila.poll();
+            System.out.println(atual.getNome());
+
+            for (Node filho : atual.getSubArvores()) {
+                fila.add(filho);
+            }
+        }
+    }
     public int maiorGrau(Node atual) {
         int maiorGrau =  contarFilhos(atual);
 
